@@ -3,15 +3,30 @@ from bs4 import BeautifulSoup as soup
 import random
 import requests
 import urllib.request
-import re
 
 OS = ('Windows NT 10.0; Win64; x64', 'Windows NT 5.1', 'Windows NT 6.1; Win64; x64', 'Windows NT 6.1; WOW64', 'Windows NT 10.0; WOW64', 'Windows NT 10.0', 'X11; Linux x86_64')
 WEBKIT = ('537.1', '537.36', '605.1.15')
 CHROME = ('21.0.1180.83', '44.0.2403.157', '46.0.2490.71', '56.0.2924.76', '60.0.3112.90', '60.0.3112.113', '63.0.3239.132', '65.0.3325.181', '67.0.3396.99', '68.0.3440.106', '69.0.3497.100', '72.0.3626.121', '74.0.3729.131', '74.0.3729.157', '74.0.3729.169', '78.0.3904.108', '79.0.3945.88', '79.0.3945.117', '79.0.3945.130', '80.0.3987.132', '80.0.3987.163', '81.0.4044.138', '83.0.4103.116', '84.0.4147.105', '84.0.4147.135', '85.0.4183.83', '85.0.4183.102', '85.0.4183.121', '86.0.4240.16', '86.0.4240.111', '87.0.4280.40', '88.0.4298.4', '88.0.4324.146', '88.0.4324.150')
 SAFARI = ('537.1', '537.36', '604.1')
 
-year = '2021'
-genreTypes = ["Any", "New", "Hip Hop", "Pop", "Rock", "Folk", "Shoegaze", "Dream Pop", "Experimental", "Punk", "Blues", "Jazz", "Screamo"];
+year = '2022'
+genreTypes = ["Any", 
+        "New", 
+        "Hip Hop", 
+        "Pop", 
+        "Rock", 
+        "Folk", 
+        "Shoegaze", 
+        "Dream Pop", 
+        "Indie Rock", 
+        "Experimental", 
+        "Punk", 
+        "Blues", 
+        "Jazz", 
+        "Screamo",
+        "Sophisti-Pop",
+        "Industrial-Rock"
+]
 
 class Album:
 	def __init__(self, name, artists, rating, genres, link):
@@ -35,8 +50,12 @@ class Album:
 		return self.name + "\n" + artists + "\n" + self.link[8:] + "\n" + genres + '\n' + self.rating
 
 def get_rating(rating):
-	res = int(100*(2 * float(rating) + 1.50))/100.
-	return str(res) if res <= 10 else '10.0'
+	res = int(100*(4.24 * float(rating) - 7.89))/100.
+	if res < 0:
+		res = 0.0
+	if res > 10:
+		res = 10.0
+	return str(res)
 
 def clean_name(name):
 	if name and name[0] in [' ', '\n', '\t']:
@@ -105,7 +124,7 @@ def get_albums(html):
 
 		html = html[end_index:]
 
-genre = 'New'#lookup[1]
+genre = 'pop'#lookup[1]
 
 
 albums = []
