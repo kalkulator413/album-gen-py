@@ -1,8 +1,9 @@
-# from command import *
 from bs4 import BeautifulSoup as soup
 import random
 import requests
 import urllib.request
+import numpy as np
+import cv2
 
 OS = ('Windows NT 10.0; Win64; x64', 'Windows NT 5.1', 'Windows NT 6.1; Win64; x64', 'Windows NT 6.1; WOW64', 'Windows NT 10.0; WOW64', 'Windows NT 10.0', 'X11; Linux x86_64')
 WEBKIT = ('537.1', '537.36', '605.1.15')
@@ -80,10 +81,6 @@ def get_url(genre):
 	return "https://rateyourmusic.com/charts/top/album,mixtape/all-time/g:" + genre.lower().replace(' ', '-') + '/'
 
 def get_html(url):
-	# proxy = urllib.request.ProxyHandler(proxies=proxyDict)
-	# opener = urllib.request.build_opener(proxy)
-	# urllib.request.install_opener(opener)
-
 	req = urllib.request.Request(url, headers = {'User-Agent': 'Mozilla/5.0 (' + random.choice(OS) + ') AppleWebKit/' + random.choice(WEBKIT) + ' (KHTML, like Gecko) Chrome/' + random.choice(CHROME) + ' Safari/' + random.choice(SAFARI)})
 	return soup(urllib.request.urlopen(req).read(), 'html.parser').prettify()
 
@@ -124,7 +121,10 @@ def get_albums(html):
 
 		html = html[end_index:]
 
-genre = 'pop'#lookup[1]
+print("Enter a genre:")
+genre = input()
+if genre.lower().replace(" ", "-") not in [x.lower().replace(" ", "-") for x in genreTypes]:
+	raise Exception("Not a valid genre")
 
 
 albums = []
