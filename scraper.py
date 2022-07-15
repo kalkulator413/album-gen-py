@@ -85,6 +85,7 @@ def process_html(html):
         albums.append(Album(clean_name(name), artists, rating, genres, image))
 
         html = html[end_index:]
+        return albums
 
 def parse_element(init, final, data):
 	start = data.find(init) + len(init)
