@@ -1,19 +1,91 @@
 from scraper import get_albums
 import random
+import PySimpleGUI as sg
+import requests
+import textwrap
 
 def main():
-    # prompt user for a genre
-    print("Enter a genre:")
-    genre = input()
+    sg.theme('DarkAmber')   # Add a touch of color
+    # All the stuff inside your window.
+    layout = [  [sg.Text('ENTER A GENRE')],
+                [sg.InputText()],
+                [sg.Button('Ok'), sg.Button('Cancel')] ]
 
-    # get a list of albums
-    albums = get_albums(genre)
+    # Create the Window
+    window = sg.Window('Choose albums', layout)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read()
+        if event == sg.WIN_CLOSED or event == 'Cancel': # if user closes window or clicks cancel
+            break
 
-    # print received albums
-    for x in range(1, 10):
-        album = random.choice(albums)
-        albums.remove(album)
-        print(str(x) + '.', album, '\n')
+        # get genre from user
+        genre = values[0]
+
+        # get a list of albums
+        albums = get_albums(genre)
+        albums_copy = albums[:]
+
+        chosen_albums = []
+        # take 9 random albums
+        for x in range(1, 10):
+            album = random.choice(albums_copy)
+            albums_copy.remove(album)
+            chosen_albums.append(album)
+            # print(str(x) + '.', album, '\n')
+
+        make_new_window(chosen_albums, albums)
+
+    window.close()
+
+def make_new_window(albums, full_list):
+    grid = []
+
+    # length 9
+    for i in range(3):
+
+        # layout.append([sg.Text(album.name, font='Courier 12', text_color='white'), sg.Text(album.rating)])
+        layout = []
+        text = []
+        size = (25, 1)
+        for x in range(3):
+            album = albums[i * 3 + x]
+            album_name = textwrap.wrap(album.name, size[0])
+            n = ''
+            for s in album_name:
+                n += s + '\n'
+            layout.extend([sg.Image(data=album.get_png_data())])
+            text.extend([sg.Text(s, font='Courier 12', text_color='white', s=size), sg.Text(album.rating, font = "Courier 10")])
+
+        grid.append(layout)
+        grid.append(text)
+
+    grid.append([sg.Button('Ok'), sg.Button('More')])
+
+    window = sg.Window("albums", grid)
+
+    more = False
+    chosen_albums = []
+    while True:
+        event, x = window.read()
+        if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
+            break
+        if event == 'More':
+            chosen_albums = []
+            albums_copy = full_list[:]
+            for x in range(1, 10):
+                album = random.choice(albums_copy)
+                albums_copy.remove(album)
+                chosen_albums.append(album)
+            more = True
+            break
+
+    window.close()
+    if more:
+        make_new_window(chosen_albums, full_list)
+
+
+
 
 if __name__ == '__main__':
     main()
