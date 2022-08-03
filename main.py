@@ -1,3 +1,4 @@
+from Album import IMAGE_WIDTH
 from scraper import get_albums
 import random
 import PySimpleGUI as sg
@@ -41,48 +42,49 @@ def main():
 def make_new_window(albums, full_list):
     grid = []
 
-    size = (25, 1)
-    asize = (size[0] + 8, 1)
+    # size = (round(IMAGE_WIDTH / 12), 1)
+    # asize = (round(1.32*size[0]), 1)
     # length 9
     for i in range(3):
 
         # layout.append([sg.Text(album.name, font='Courier 12', text_color='white'), sg.Text(album.rating)])
         layout = []
-        text = []
-        artist = []
-        genres = []
+        # text = []
+        # artist = []
+        # genres = []
         
         for x in range(3):
             album = albums[i * 3 + x]
-            s = wrap_str(album.name, int(1.35*size[0]))
-            if ('\n' in s[:-2]):
-                size = (size[0], 2)
+            # s = wrap_str(album.name, int(1.35*size[0]))
+            # if ('\n' in s[:-2]):
+            #     size = (size[0], 2)
             layout.extend([sg.Image(data=album.get_png_data())])
-            text.extend([sg.Text(s, font='Courier 12', text_color='white', s=size), sg.Text(album.rating, font = "Courier 10")])
+            # text.extend([sg.Text(s, font=f'Courier {round(IMAGE_WIDTH/25)}', text_color='white', 
+            #     s=size), sg.Text(album.rating, font = f"Courier {round(IMAGE_WIDTH/25)}")])
 
-            artists = ''
-            for a in album.artists:
-                artists += a + ", "
-            artists = artists[:-2]
-            a = wrap_str(artists, int(1.2*asize[0]))
-            if ('\n' in a[:-2]):
-                asize = (asize[0], 2)
-            artist.extend([sg.Text(a, font="Courier 11", text_color='white', s=asize)])
+            # artists = ''
+            # for a in album.artists:
+            #     artists += a + ", "
+            # artists = artists[:-2]
+            # a = wrap_str(artists, int(1.2*asize[0]))
+            # if ('\n' in a[:-2]):
+            #     asize = (asize[0], 2)
+            # artist.extend([sg.Text(a, font=f"Courier {round(IMAGE_WIDTH/27)}", text_color='white', s=asize)])
 
             # gs = ''
             # for g in album.genres:
             #     gs += g + ", "
             # gs = gs[:-2]
             # genre = wrap_str(gs, int(1.2*asize[0]))
-            genres.extend([sg.Text(album.genres[0], font="Courier 11", text_color='gray', s=(asize[0], 1))])
+            # genres.extend([sg.Text(album.genres[0], font="Courier 11", text_color='gray', s=(asize[0], 1))])
 
         grid.append(layout)
-        grid.append(text)
-        grid.append(artist)
-        grid.append(genres)
+        # grid.append(text)
+        # grid.append(artist)
+        # grid.append(genres)
 
-        asize = (asize[0], 1)
-        size = (size[0], 1)
+        # asize = (asize[0], 1)
+        # size = (size[0], 1)
 
     grid.append([sg.Button('Ok'), sg.Button('More')])
 
