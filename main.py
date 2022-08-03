@@ -47,18 +47,26 @@ def make_new_window(albums, full_list):
         # layout.append([sg.Text(album.name, font='Courier 12', text_color='white'), sg.Text(album.rating)])
         layout = []
         text = []
-        size = (25, 1)
+        artist = []
+        genres = []
+        size = (25, 2)
         for x in range(3):
             album = albums[i * 3 + x]
-            album_name = textwrap.wrap(album.name, size[0])
-            n = ''
-            for s in album_name:
-                n += s + '\n'
+            s = wrap_str(album.name, int(1.3*size[0]))
             layout.extend([sg.Image(data=album.get_png_data())])
             text.extend([sg.Text(s, font='Courier 12', text_color='white', s=size), sg.Text(album.rating, font = "Courier 10")])
 
+            artists = ''
+            for a in album.artists:
+                artists += a + ", "
+            artists = artists[:-2]
+            asize = (size[0] + 8, 2)
+            a = wrap_str(artists, int(1.2*asize[0]))
+            artist.extend([sg.Text(a, font="Courier 11", text_color='white', s=asize)])
+
         grid.append(layout)
         grid.append(text)
+        grid.append(artist)
 
     grid.append([sg.Button('Ok'), sg.Button('More')])
 
@@ -84,7 +92,12 @@ def make_new_window(albums, full_list):
     if more:
         make_new_window(chosen_albums, full_list)
 
-
+def wrap_str(n, size):
+    album_name = textwrap.wrap(n, size)
+    string = ''
+    for s in album_name:
+        string += s + '\n'
+    return string
 
 
 if __name__ == '__main__':
