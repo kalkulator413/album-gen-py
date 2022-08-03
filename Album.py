@@ -5,6 +5,12 @@ import cloudscraper
 import io
 import os
 IMAGE_WIDTH = 200
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+from env import *
+
+client_credentials_manager = SpotifyClientCredentials(client_id = SPOTIPY_CID, client_secret = SPOTIPY_SECRET)
+sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
 
 class Album:
 	def __init__(self, name, artists, rating, genres, link):
@@ -16,6 +22,18 @@ class Album:
 
 	def __str__(self):
 		return self.name + "\n" + self.get_artists_as_str() + "\n" + self.link + "\n" + self.get_genres_as_str() + '\n' + self.rating
+
+	def get_spotify_link(self):
+		try:
+			results = sp.search(q = 'artist:' + self.artists[0] + ' album:' + self.name, type = 'album')
+			items = results['albums']['items']
+			if len(items) > 0:
+				album = items[0]
+				return 'https://open.spotify.com/album/' + album['id']
+			return 'https://open.spotify.com/search/' + self.name.lower().replace(' ', '%20') + '%20' + self.artists[0].lower().replace(' ', '%20')
+		except Exception as e:
+			print("Couldnt find link for album")
+			return ("https://open.spotify.com/")
 
 	def get_artists_as_str(self):
 		artists = ''
@@ -29,11 +47,22 @@ class Album:
 			g += genre + ", "
 		return g[:-2]
 
+	def get_album_img(self):
+		try:
+			results = sp.search(q="artist:" + self.artists[0] + " album:" + self.name, type="album")
+			items = results['albums']['items']
+			album = items[0]
+			return album['images'][0]['url']
+		except:
+			return ('https://e.snmc.io/i/600/s/8559a4fc4072bf4049920706e223a5af/8703155/' 
+					+ 'critarc-x-jumbudrif-this-image-is-blocked-either-due-to-legal-restri'
+					+ 'ctions-in-your-country-or-due-to-your-personal-settings-login-and-go-to-your-account-options-to-see-more-info-Cover-Art.jpg')
+
 	def get_png_data(self):
 		if self.link.rstrip() != 'https://':
 			url = self.link
 		else:
-			url = 'https://e.snmc.io/i/600/s/8559a4fc4072bf4049920706e223a5af/8703155/critarc-x-jumbudrif-this-image-is-blocked-either-due-to-legal-restrictions-in-your-country-or-due-to-your-personal-settings-login-and-go-to-your-account-options-to-see-more-info-Cover-Art.jpg'
+			url = self.get_album_img()
 		jpg_data = (
 			cloudscraper.create_scraper(
 				browser={"browser": "firefox", "platform": "windows", "mobile": False}
