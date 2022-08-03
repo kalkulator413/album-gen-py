@@ -1,6 +1,10 @@
+from email.utils import localtime
 from urllib.request import Request, urlopen
 import random
 from Album import Album
+import pickle
+import os
+import time
 
 _OS = ('Windows NT 10.0; Win64; x64', 'Windows NT 5.1', 'Windows NT 6.1; Win64; x64', 'Windows NT 6.1; WOW64', 'Windows NT 10.0; WOW64', 'Windows NT 10.0', 'X11; Linux x86_64')
 _WEBKIT = ('537.1', '537.36', '605.1.15')
@@ -9,16 +13,46 @@ _SAFARI = ('537.1', '537.36', '604.1')
 _year = '2022'
 
 def get_albums(genre):
-    albums = []
-    num_pages = get_num_pages(genre)
-    for pg in range(1, num_pages + 1):
-        url = get_url(genre, pg)
-        try:
-            html = get_html(url)
-        except Exception as e:
-            print(e)
+
+    f = os.path.join('data', genre.replace(" ", "-").lower())
+    time_diff = 0
+
+    if os.path.exists(f):
+        filemade = time.localtime(os.path.getctime(f))
+        filemade = int(time.strftime('%j', filemade))
+        current_time = time.localtime()
+        current_time = int(time.strftime('%j', current_time))
+        time_diff = abs(current_time - filemade)
+        
+    
+    if os.path.exists(f) and time_diff < 7:
+        infile = open(f,'rb')
+        albums = pickle.load(infile)
+        infile.close()
+    else:
+        albums = []
+        num_pages = get_num_pages(genre)
+
+        gFile = os.path.join("genreSet")
+        infile = open(gFile,'rb')
+        gSet = pickle.load(infile)
+        infile.close()
+
+        if genre.replace(" ", "-").lower() not in gSet:
             raise Exception("Invalid genre. Valid genres include new, any, pop, rock, folk, hip-hop, and others")
-        albums.extend(process_html(html))
+
+        for pg in range(1, num_pages + 1):
+            url = get_url(genre, pg)
+            try:
+                html = get_html(url)
+            except Exception as e:
+                print(e)
+                raise Exception("unknown error")
+            albums.extend(process_html(html))
+
+        outfile = open(f,'wb')
+        pickle.dump(albums, outfile)
+        outfile.close()
 
     return albums
 
@@ -85,7 +119,7 @@ def process_html(html):
         albums.append(Album(clean_name(name), artists, rating, genres, image))
 
         html = html[end_index:]
-        return albums
+    return albums
 
 def parse_element(init, final, data):
 	start = data.find(init) + len(init)
