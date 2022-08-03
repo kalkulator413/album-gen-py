@@ -77,13 +77,6 @@ def make_new_window(albums, full_list):
     if more:
         make_new_window(chosen_albums, full_list)
 
-def wrap_str(n, size):
-    album_name = textwrap.wrap(n, size)
-    string = ''
-    for s in album_name:
-        string += s + '\n'
-    return string
-
 
 if __name__ == '__main__':
     main()
