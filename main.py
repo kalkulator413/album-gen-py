@@ -2,7 +2,6 @@ from Album import IMAGE_WIDTH
 from scraper import get_albums
 import random
 import PySimpleGUI as sg
-import textwrap
 import webbrowser
 
 def main():
