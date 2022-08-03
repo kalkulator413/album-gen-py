@@ -10,7 +10,7 @@ class Album:
 		self.artists = artists
 		self.rating = Album._get_rating(rating)
 		self.genres = genres
-		self.link = link if link[0] != '/' else 'https:' + link
+		self.link = 'https://' + link
 
 	def __str__(self):
 		artists = ''
@@ -23,7 +23,7 @@ class Album:
 			genres += genre + ", "
 		genres = genres[:-2]
 
-		return self.name + "\n" + artists + "\n" + self.link[8:] + "\n" + genres + '\n' + self.rating
+		return self.name + "\n" + artists + "\n" + self.link + "\n" + genres + '\n' + self.rating
 
 	@staticmethod
 	def _get_rating(rating):
