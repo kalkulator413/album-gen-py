@@ -6,9 +6,8 @@ from spotipy.oauth2 import SpotifyPKCE
 
 def main():
     #authenticate spotify credentials
-    auth_manager=SpotifyPKCE(client_id = '733feec74613475496335bd86b89e056', redirect_uri='http://kalkulator413.com')
+    auth_manager=SpotifyPKCE(client_id = '733feec74613475496335bd86b89e056', redirect_uri='http://localhost:8888')
     cache_token = auth_manager.get_access_token()
-
     
     sg.theme('DarkAmber')   # Add a touch of color
     # All the stuff inside your window.
