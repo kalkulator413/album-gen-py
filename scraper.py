@@ -5,6 +5,7 @@ from Album import Album
 import pickle
 import os
 import time
+import spotipy
 
 _OS = ('Windows NT 10.0; Win64; x64', 'Windows NT 5.1', 'Windows NT 6.1; Win64; x64', 'Windows NT 6.1; WOW64', 'Windows NT 10.0; WOW64', 'Windows NT 10.0', 'X11; Linux x86_64')
 _WEBKIT = ('537.1', '537.36', '605.1.15')
@@ -30,6 +31,8 @@ def get_albums(genre, cache_token):
         infile = open(f,'rb')
         albums = pickle.load(infile)
         infile.close()
+        for album in albums:
+            album.sp = spotipy.Spotify(cache_token)
     else:
         albums = []
         num_pages = get_num_pages(genre)
