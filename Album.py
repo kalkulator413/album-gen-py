@@ -6,15 +6,15 @@ import io
 import os
 IMAGE_WIDTH = 200
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyPKCE
 from env import *
 
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+sp = None
 
-#authenticate spotify
-auth_manager = SpotifyClientCredentials()
-sp = spotipy.Spotify(auth_manager=auth_manager)
+def authenticate():
+	#authenticate spotify
+	auth_manager = SpotifyPKCE()
+	sp = spotipy.Spotify(auth_manager=auth_manager)
 
 class Album:
 	def __init__(self, name, artists, rating, genres, link):

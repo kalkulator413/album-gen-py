@@ -2,8 +2,12 @@ from scraper import get_albums
 import random
 import PySimpleGUI as sg
 import webbrowser
+from Album import authenticate
 
 def main():
+    #authenticate spotify credentials
+    authenticate()
+    
     sg.theme('DarkAmber')   # Add a touch of color
     # All the stuff inside your window.
     layout = [  [sg.Text('ENTER A GENRE ("any" and "new" are valid entries)')],
