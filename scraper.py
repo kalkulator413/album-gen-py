@@ -14,7 +14,8 @@ _year = '2022'
 
 def get_albums(genre, cache_token):
 
-    f = os.path.join('data', genre.replace(" ", "-").lower())
+    data_f = os.path.join(".", "data")
+    f = os.path.join(data_f, genre.replace(" ", "-").lower())
     time_diff = 0
 
     if os.path.exists(f):
@@ -50,9 +51,8 @@ def get_albums(genre, cache_token):
                 raise Exception("unknown error")
             albums.extend(process_html(html, cache_token))
 
-        outfile = open(f,'wb')
-        pickle.dump(albums, outfile)
-        outfile.close()
+        with open(f, "wb") as outfile:
+            pickle.dump(albums, outfile)
 
     return albums
 
