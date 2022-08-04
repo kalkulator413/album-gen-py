@@ -4,7 +4,7 @@
 
 ### usage instructions: run main.py, authorize with spotify and enter the link in the terminal
 ### required python libraries
-- PIL `pip3 install pillow `
-- cloudscraper `pip3 install cloudscraper`
-- spotipy `pip3 install spotipy`
-- PySimpleGUI `pip install PySimpleGUI`
+- PIL `pip3 install pillow` or `pip install pillow`
+- cloudscraper `pip3 install cloudscraper` or `pip install cloudscraper`
+- spotipy `pip3 install spotipy` or `pip install spotipy`
+- PySimpleGUI `pip3 install PySimpleGUI` or `pip install PySimpleGUI`
