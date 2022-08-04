@@ -1,7 +1,6 @@
 from scraper import get_albums
 import random
 import PySimpleGUI as sg
-import textwrap
 import webbrowser
 
 def main():
@@ -76,13 +75,6 @@ def make_new_window(albums, full_list):
     window.close()
     if more:
         make_new_window(chosen_albums, full_list)
-
-def wrap_str(n, size):
-    album_name = textwrap.wrap(n, size)
-    string = ''
-    for s in album_name:
-        string += s + '\n'
-    return string
 
 
 if __name__ == '__main__':
