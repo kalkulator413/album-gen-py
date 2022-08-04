@@ -5,37 +5,32 @@ import cloudscraper
 import io
 import os
 IMAGE_WIDTH = 200
-import spotipy
-from spotipy.oauth2 import SpotifyPKCE
 from env import *
-
-sp = None
-
-def authenticate():
-	#authenticate spotify
-	auth_manager = SpotifyPKCE()
-	sp = spotipy.Spotify(auth_manager=auth_manager)
+import spotipy
 
 class Album:
-	def __init__(self, name, artists, rating, genres, link):
+
+	def __init__(self, name, artists, rating, genres, link, auth_manager):
 		self.name = name
 		self.artists = artists
 		self.rating = Album._get_rating(rating)
 		self.genres = genres
 		self.link = 'https://' + link
+		self.sp = spotipy.Spotify(auth_manager=auth_manager)
 
 	def __str__(self):
 		return self.name + "\n" + self.get_artists_as_str() + "\n" + self.link + "\n" + self.get_genres_as_str() + '\n' + self.rating
 
 	def get_spotify_link(self):
 		try:
-			results = sp.search(q = 'artist:' + self.artists[0] + ' album:' + self.name, type = 'album')
+			results = self.sp.search(q = 'artist:' + self.artists[0] + ' album:' + self.name, type = 'album')
 			items = results['albums']['items']
 			if len(items) > 0:
 				album = items[0]
 				return 'https://open.spotify.com/album/' + album['id']
 			return 'https://open.spotify.com/search/' + self.name.lower().replace(' ', '%20') + '%20' + self.artists[0].lower().replace(' ', '%20')
 		except Exception as e:
+			print(e)
 			print("Couldnt find link for album")
 			return ("https://open.spotify.com/")
 
@@ -53,7 +48,7 @@ class Album:
 
 	def get_album_img(self):
 		try:
-			results = sp.search(q="artist:" + self.artists[0] + " album:" + self.name, type="album")
+			results = self.sp.search(q="artist:" + self.artists[0] + " album:" + self.name, type="album")
 			items = results['albums']['items']
 			album = items[0]
 			return album['images'][0]['url']

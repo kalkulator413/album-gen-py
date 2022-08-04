@@ -2,11 +2,12 @@ from scraper import get_albums
 import random
 import PySimpleGUI as sg
 import webbrowser
-from Album import authenticate
+from spotipy.oauth2 import SpotifyPKCE
 
 def main():
     #authenticate spotify credentials
-    authenticate()
+    auth_manager=SpotifyPKCE(client_id = '733feec74613475496335bd86b89e056', redirect_uri='http://kalkulator413.com')
+    # auth_manager.get_authorization_code()
     
     sg.theme('DarkAmber')   # Add a touch of color
     # All the stuff inside your window.
@@ -26,7 +27,7 @@ def main():
         genre = values[0]
 
         # get a list of albums
-        albums = get_albums(genre)
+        albums = get_albums(genre, auth_manager)
         albums_copy = albums[:]
 
         chosen_albums = []

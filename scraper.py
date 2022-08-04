@@ -12,7 +12,7 @@ _CHROME = ('21.0.1180.83', '44.0.2403.157', '46.0.2490.71', '56.0.2924.76', '60.
 _SAFARI = ('537.1', '537.36', '604.1')
 _year = '2022'
 
-def get_albums(genre):
+def get_albums(genre, auth_manager):
 
     f = os.path.join('data', genre.replace(" ", "-").lower())
     time_diff = 0
@@ -38,7 +38,7 @@ def get_albums(genre):
         gSet = pickle.load(infile)
         infile.close()
 
-        if genre.replace(" ", "-").lower() not in gSet:
+        if genre.replace(" ", "-").lower() not in gSet and genre.replace(" ", "-").lower() not in ['any', 'new']:
             raise Exception("Invalid genre. Valid genres include new, any, pop, rock, folk, hip-hop, and others")
 
         for pg in range(1, num_pages + 1):
@@ -48,7 +48,7 @@ def get_albums(genre):
             except Exception as e:
                 print(e)
                 raise Exception("unknown error")
-            albums.extend(process_html(html))
+            albums.extend(process_html(html, auth_manager))
 
         outfile = open(f,'wb')
         pickle.dump(albums, outfile)
@@ -81,7 +81,7 @@ def get_html(url):
         ' Safari/' + random.choice(_SAFARI)})
 	return urlopen(req).read().decode('utf-8')
 
-def process_html(html):
+def process_html(html, auth_manager):
     albums = []
 
     while html.find('<div id="pos') >= 0:
@@ -116,7 +116,7 @@ def process_html(html):
         if '★' in name:
             name = 'Blackstar'
 
-        albums.append(Album(clean_name(name), artists, rating, genres, image))
+        albums.append(Album(clean_name(name), artists, rating, genres, image, auth_manager))
 
         html = html[end_index:]
     return albums
