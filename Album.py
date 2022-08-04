@@ -9,8 +9,12 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from env import *
 
-client_credentials_manager = SpotifyClientCredentials(client_id = SPOTIPY_CID, client_secret = SPOTIPY_SECRET)
-sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+#authenticate spotify
+auth_manager = SpotifyClientCredentials()
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
 class Album:
 	def __init__(self, name, artists, rating, genres, link):
