@@ -12,7 +12,7 @@ _CHROME = ('21.0.1180.83', '44.0.2403.157', '46.0.2490.71', '56.0.2924.76', '60.
 _SAFARI = ('537.1', '537.36', '604.1')
 _year = '2022'
 
-def get_albums(genre, auth_manager):
+def get_albums(genre, cache_token):
 
     f = os.path.join('data', genre.replace(" ", "-").lower())
     time_diff = 0
@@ -48,7 +48,7 @@ def get_albums(genre, auth_manager):
             except Exception as e:
                 print(e)
                 raise Exception("unknown error")
-            albums.extend(process_html(html, auth_manager))
+            albums.extend(process_html(html, cache_token))
 
         outfile = open(f,'wb')
         pickle.dump(albums, outfile)
@@ -81,7 +81,7 @@ def get_html(url):
         ' Safari/' + random.choice(_SAFARI)})
 	return urlopen(req).read().decode('utf-8')
 
-def process_html(html, auth_manager):
+def process_html(html, cache_token):
     albums = []
 
     while html.find('<div id="pos') >= 0:
@@ -116,7 +116,7 @@ def process_html(html, auth_manager):
         if '★' in name:
             name = 'Blackstar'
 
-        albums.append(Album(clean_name(name), artists, rating, genres, image, auth_manager))
+        albums.append(Album(clean_name(name), artists, rating, genres, image, cache_token))
 
         html = html[end_index:]
     return albums

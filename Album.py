@@ -5,18 +5,17 @@ import cloudscraper
 import io
 import os
 IMAGE_WIDTH = 200
-from env import *
 import spotipy
 
 class Album:
 
-	def __init__(self, name, artists, rating, genres, link, auth_manager):
+	def __init__(self, name, artists, rating, genres, link, cache_token):
 		self.name = name
 		self.artists = artists
 		self.rating = Album._get_rating(rating)
 		self.genres = genres
 		self.link = 'https://' + link
-		self.sp = spotipy.Spotify(auth_manager=auth_manager)
+		self.sp = spotipy.Spotify(cache_token)
 
 	def __str__(self):
 		return self.name + "\n" + self.get_artists_as_str() + "\n" + self.link + "\n" + self.get_genres_as_str() + '\n' + self.rating
