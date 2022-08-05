@@ -101,8 +101,9 @@ class Album:
 		if (green < 0):
 			green = 0
 
-		ratio = 255.0 / green
-		red = int(ratio * red)
+		if green != 0:
+			ratio = 255.0 / green
+			red = int(ratio * red)
 		if (red > 255):
 			red = 255
 
