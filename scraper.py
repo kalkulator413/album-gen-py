@@ -15,7 +15,7 @@ _year = '2022'
 
 def get_albums(genre, cache_token):
 
-    data_f = os.path.join(".", "data")
+    data_f = os.path.join(".", ".data")
     f = os.path.join(data_f, genre.replace(" ", "-").lower())
     time_diff = 0
 
