@@ -4,6 +4,7 @@
 
 ### usage instructions: run main.py using `python3 main.py`, authorize with spotify when prompted
 ### NOTE: I WILL NEED TO MANUALLY ADD YOUR SPOTIFY EMAIL ADDRESS SINCE SPOTIFY LIMITS PUBLIC ACCESS TO HOBBY PROJECTS LIKE THIS ONE :pensive:
+### contact me at fkalkin@ucsd.edu
 ### required python libraries
 - PIL `pip3 install pillow` or `pip install pillow`
 - cloudscraper `pip3 install cloudscraper` or `pip install cloudscraper`
